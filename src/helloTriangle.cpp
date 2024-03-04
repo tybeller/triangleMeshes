@@ -6,6 +6,9 @@
 #include <iostream>
 #include "shader.h"
 #include "objParser.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -47,7 +50,7 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     std::vector<float> vertices;
-    parseFile("flowers.obj", vertices);
+    parseFile("shark.obj", vertices);
     /*for (auto vec : vertices) {
         std::cout << vec.x << "/" << vec.y << "/"<< vec.z << " ";
     }*/

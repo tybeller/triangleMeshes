@@ -30,7 +30,7 @@ void parseFile(std::string name, std::vector<float>& outVect) {
         if (lineHeader == "v") {
             glm::vec3 v;
             lineStream >> v.x >> v.y >> v.z;
-            verticies.push_back(v * glm::vec3(0.5f, 0.5f, 0.5f));
+            verticies.push_back(v * glm::vec3(0.03f, 0.03f, 0.03f));
         }
         /*
         //vertex textures eg "vt -1.000000 -1.000000 1.000000"
@@ -61,9 +61,14 @@ void parseFile(std::string name, std::vector<float>& outVect) {
 
     //now process the verticies by faces 
     for (auto face : faces) {
-        for (unsigned int i = 0; i < face.size()-2; i++) {
-            for (unsigned int j = 0; j < 3; j++){
-                glm::vec3 v = verticies[i+j];
+        glm::vec3 rootVector = verticies[face[0]];
+        for (unsigned int i = 1; i < face.size()-1; i++) {
+            outVect.push_back(rootVector.x);
+            outVect.push_back(rootVector.y);
+            outVect.push_back(rootVector.z);
+            outVect.insert(outVect.end(), {0.0f, 0.0f, 1.0f});
+            for (unsigned int j = 0; j < 2; j++){
+                glm::vec3 v = verticies[face[i+j]];
                 outVect.push_back(v.x);
                 outVect.push_back(v.y);
                 outVect.push_back(v.z);
