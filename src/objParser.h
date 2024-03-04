@@ -4,6 +4,4 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-struct objParser {
-    void parseFile(std::string name, std::vector<glm::vec3>& outVect);
-};
+void parseFile(std::string name, std::vector<float>& outVect);

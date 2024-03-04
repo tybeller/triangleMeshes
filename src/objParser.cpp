@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <sstream>
 
-void objParser::parseFile(std::string name, std::vector<glm::vec3>& outVect) {
+void parseFile(std::string name, std::vector<float>& outVect) {
     std::ifstream objFile;
     objFile.open("../data/" + name);
     if (!objFile.is_open()) {
@@ -30,7 +30,7 @@ void objParser::parseFile(std::string name, std::vector<glm::vec3>& outVect) {
         if (lineHeader == "v") {
             glm::vec3 v;
             lineStream >> v.x >> v.y >> v.z;
-            verticies.push_back(v);
+            verticies.push_back(v * glm::vec3(0.5f, 0.5f, 0.5f));
         }
         /*
         //vertex textures eg "vt -1.000000 -1.000000 1.000000"
@@ -61,23 +61,22 @@ void objParser::parseFile(std::string name, std::vector<glm::vec3>& outVect) {
 
     //now process the verticies by faces 
     for (auto face : faces) {
-        for (unsigned int i = 0; i < face.size()-3; i++) {
+        for (unsigned int i = 0; i < face.size()-2; i++) {
             for (unsigned int j = 0; j < 3; j++){
-                outVect.push_back(verticies[face[i+j]]);
-                switch (j) {
-                    case 0:
-                        outVect.push_back({1.0f, 0.0f, 0.0f});
-                        break;
-                    case 1:
-                        outVect.push_back({0.0f, 1.0f, 0.0f});
-                        break;
-                    case 2:
-                        outVect.push_back({0.0f, 1.0f, 0.0f});
-                        break;
+                glm::vec3 v = verticies[i+j];
+                outVect.push_back(v.x);
+                outVect.push_back(v.y);
+                outVect.push_back(v.z);
+                for (unsigned int k = 0; k < 3; k++) {
+                    if (k == j) {
+                        outVect.push_back(1.0f);
+                    }
+                    else {
+                        outVect.push_back(0.0f);
+                    }
                 }
             }
         }
     }
-
     return;
 };
