@@ -61,8 +61,23 @@ void objParser::parseFile(std::string name, std::vector<glm::vec3>& outVect) {
 
     //now process the verticies by faces 
     for (auto face : faces) {
-        for (auto vertexIndex : face){
-            outVect.push_back(verticies[vertexIndex]);
+        for (unsigned int i = 0; i < face.size()-3; i++) {
+            for (unsigned int j = 0; j < 3; j++){
+                outVect.push_back(verticies[face[i+j]]);
+                switch (j) {
+                    case 0:
+                        outVect.push_back({1.0f, 0.0f, 0.0f});
+                        break;
+                    case 1:
+                        outVect.push_back({0.0f, 1.0f, 0.0f});
+                        break;
+                    case 2:
+                        outVect.push_back({0.0f, 1.0f, 0.0f});
+                        break;
+                }
+            }
         }
-    };
+    }
+
+    return;
 };
