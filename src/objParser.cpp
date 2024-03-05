@@ -3,7 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
-#include <unordered_map>
+//#include <unordered_map>
 
 /*struct colorLib {
     std::unordered_map<std::string, glm::vec3> diffColors;
@@ -69,11 +69,14 @@ void parseFile(std::string name, std::vector<float>& outVect, std::vector<unsign
             glm::vec3 v;
             lineStream >> v.x >> v.y >> v.z;
             verticies.push_back(v * glm::vec3(0.03f, 0.03f, 0.03f));
+            float a = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            float c = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
             
             glm::vec3 color = v;
             v = v * glm::vec3(0.02f, 0.02f, 0.02f);
 
-            outVect.insert(outVect.end(), {v.x, v.y, v.z, color.x, color.y, color.z});
+            outVect.insert(outVect.end(), {v.x, v.y, v.z, a, b, c});
         }
         /*
         //vertex textures eg "vt -1.000000 -1.000000 1.000000"

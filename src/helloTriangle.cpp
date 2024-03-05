@@ -94,8 +94,10 @@ int main()
 
 
     // uncomment this call to draw in wireframe polygons.
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
+    //enable z buffer
+    glEnable(GL_DEPTH_TEST);
 
     //initialize position rotation and scale for object
     glm::vec3 position(0.0f);
@@ -112,7 +114,7 @@ int main()
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //create transformations
         glm::mat4 transform = glm::mat4(1.0f);
