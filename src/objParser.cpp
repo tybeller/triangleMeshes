@@ -3,10 +3,47 @@
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
+#include <unordered_map>
 
-void parseFile(std::string name, std::vector<float>& outVect) {
+/*struct colorLib {
+    std::unordered_map<std::string, glm::vec3> diffColors;
+};
+
+int parseMaterials(std::string name, colorLib& cl) {
+    std::ifstream mtlFile;
+    mtlFile.open("../data/" + name + ".mtl");
+    if (!mtlFile.is_open()) {
+        return -1;
+    }
+
+    std::string line;
+
+    std::string currMaterial = "";
+
+    while (getline(mtlFile, line)){
+        std::istringstream lineStream(line);
+
+        std::string lineHeader;
+        lineStream >> lineHeader;
+
+        if (lineHeader == "newmtl"){
+            lineStream >> currMaterial;
+        }
+        if (lineHeader == "Kd"){
+            glm::vec3 diffuseColor;
+            lineStream >> diffuseColor.x >> diffuseColor.y >> diffuseColor.z;
+
+            cl.diffColors[currMaterial] = diffuseColor;
+        }
+    }
+}*/
+
+void parseFile(std::string name, std::vector<float>& outVect, std::vector<unsigned int>& outIndices) {
+    //colorLib cl;
     std::ifstream objFile;
-    objFile.open("../data/" + name);
+
+    //parseMaterials(name, cl);
+    objFile.open("../data/" + name + ".obj");
     if (!objFile.is_open()) {
         //throw an error
         throw std::invalid_argument("File \"" + name + "\" cannot be opened");
@@ -18,6 +55,7 @@ void parseFile(std::string name, std::vector<float>& outVect) {
     //std::vector<glm::vec2> uvs;
     //std::vector<glm::vec3> normals;
     std::vector<std::vector<int>> faces;
+    //glm::vec3 currColor = vec3(1.0f, 0.0f, 0.0f);
     
     while (getline(objFile, line)) {
         std::istringstream lineStream(line);
@@ -31,6 +69,11 @@ void parseFile(std::string name, std::vector<float>& outVect) {
             glm::vec3 v;
             lineStream >> v.x >> v.y >> v.z;
             verticies.push_back(v * glm::vec3(0.03f, 0.03f, 0.03f));
+            
+            glm::vec3 color = v;
+            v = v * glm::vec3(0.02f, 0.02f, 0.02f);
+
+            outVect.insert(outVect.end(), {v.x, v.y, v.z, color.x, color.y, color.z});
         }
         /*
         //vertex textures eg "vt -1.000000 -1.000000 1.000000"
@@ -61,25 +104,10 @@ void parseFile(std::string name, std::vector<float>& outVect) {
 
     //now process the verticies by faces 
     for (auto face : faces) {
-        glm::vec3 rootVector = verticies[face[0]];
         for (unsigned int i = 1; i < face.size()-1; i++) {
-            outVect.push_back(rootVector.x);
-            outVect.push_back(rootVector.y);
-            outVect.push_back(rootVector.z);
-            outVect.insert(outVect.end(), {0.0f, 0.0f, 1.0f});
+            outIndices.push_back(face[0]);
             for (unsigned int j = 0; j < 2; j++){
-                glm::vec3 v = verticies[face[i+j]];
-                outVect.push_back(v.x);
-                outVect.push_back(v.y);
-                outVect.push_back(v.z);
-                for (unsigned int k = 0; k < 3; k++) {
-                    if (k == j) {
-                        outVect.push_back(1.0f);
-                    }
-                    else {
-                        outVect.push_back(0.0f);
-                    }
-                }
+                outIndices.push_back(face[i+j]);
             }
         }
     }
