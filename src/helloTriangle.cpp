@@ -51,7 +51,7 @@ int main()
     // ------------------------------------------------------------------
     std::vector<float> vertices;
     std::vector<unsigned int> indices;
-    parseFile("castle", vertices, indices);
+    parseFile("bigdragon", vertices, indices);
 
     /*for (auto v : vertices){
         std::cout << v.vertex.x << " " << v.vertex.y << " " << v.vertex.z << std::endl;
